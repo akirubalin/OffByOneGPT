@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "WrongBot Web",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/api_server.py",
+        "console": "integratedTerminal",
+        "envFile": "${workspaceFolder}/.env",
+        "justMyCode": true,
+        "serverReadyAction": {
+          "pattern": "http://127\\.0\\.0\\.1:(\\d+)",
+          "uriFormat": "http://localhost:%s",
+          "action": "openExternally"
+        }
+      }
+    ]
+  }
+  

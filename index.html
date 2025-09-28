@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>WrongBot</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body{font-family:system-ui;margin:0;background:#0b0b0c;color:#e9e9e9}
+    .wrap{max-width:800px;margin:40px auto;padding:16px}
+    input,button,textarea{font:inherit}
+    .row{display:flex;gap:8px}
+    #q{flex:1;padding:10px;border-radius:10px;border:1px solid #2b2b2e;background:#151518;color:#e9e9e9}
+    button{padding:10px 14px;border-radius:10px;background:#4f46e5;color:#fff;border:0}
+    #a{white-space:pre-wrap;border:1px solid #2b2b2e;border-radius:12px;padding:12px;margin-top:12px;background:#111114;min-height:100px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>WrongBot</h1>
+    <div class="row">
+      <input id="q" placeholder="Ask anything…" />
+      <button id="go">Send</button>
+    </div>
+    <div id="a"></div>
+  </div>
+  <script>
+    const q = document.getElementById('q');
+    const a = document.getElementById('a');
+    const go = document.getElementById('go');
+
+    async function send() {
+      const text = q.value.trim();
+      if (!text) return;
+      go.disabled = true; a.textContent = "Thinking…";
+      try{
+        const r = await fetch('/api/chat', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({ q: text })
+        });
+        const j = await r.json();
+        a.textContent = j.a || "(no answer)";
+      } catch(e){
+        a.textContent = "Server error.";
+      } finally {
+        go.disabled = false;
+        q.focus();
+      }
+    }
+
+    go.onclick = send;
+    q.addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+  </script>
+</body>
+</html>
